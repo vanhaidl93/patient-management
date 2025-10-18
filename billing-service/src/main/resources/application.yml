@@ -1,0 +1,12 @@
+#expose server port for REST
+server:
+  port: 4001
+
+#expose server port for GRPC
+grpc:
+  server:
+    port: 9001
+
+spring:
+  application:
+    name: billing-service

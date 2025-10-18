@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: patient-service
+
+  #kafka
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.ByteArraySerializer
+
+# UNCOMMENT TO USE IN-MEMORY DATABASE OUTSIDE OF DOCKER
+#   #h2 - in-memory database (development mode: test)
+#  h2:
+#    console:
+#      path: /h2-console #anytime we start the application that has an H2 in-memory database
+#                        # endpoint to see
+#  # datasource: setup DB connection (H2 - development mode: test)
+#  datasource:
+#    url: jdbc:h2:mem:testdb
+#    driver-class-name: org.h2.Driver
+#    username: admin
+#    password: test
+#  # jpa: configures ORM - hibernate that uses DB connection
+#  jpa:
+#    database-platform: org.hibernate.dialect.H2Dialect # be selected by default
+#    hibernate:
+#      ddl-auto: update #development mode: update entity against table database.
+#  # sql: looks for data.sql on the classpath or under 'resources/', Run scripts every time
+#  sql:
+#    init:
+#      mode: always  #development mode.
+
+server:
+  port: 4000
+
+logging:
+  level:
+    root: info # all INFO - WARN - ERROR messages be logged to the terminal.
