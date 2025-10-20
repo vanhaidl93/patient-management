@@ -1,6 +1,8 @@
 package com.hainguyen.patientservice.repository;
 
 import com.hainguyen.patientservice.model.Patient;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
@@ -12,5 +14,7 @@ public interface PatientRepository extends JpaRepository<Patient, UUID> {
     // if check other patient (IdNot) have same email ?
     boolean existsByEmailAndIdNot(String email, UUID id);
 
+
+    Page<Patient> findByNameContainingIgnoreCase(Pageable pageable, String searchValue);
 
 }

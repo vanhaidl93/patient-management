@@ -1,5 +1,6 @@
 package com.hainguyen.patientservice.service;
 
+import com.hainguyen.patientservice.dto.PagedPatientResponseDTO;
 import com.hainguyen.patientservice.dto.PatientRequestDTO;
 import com.hainguyen.patientservice.dto.PatientResponseDTO;
 import com.hainguyen.patientservice.exception.EmailAlreadyExistsException;
@@ -9,6 +10,10 @@ import com.hainguyen.patientservice.kafka.KafkaProducer;
 import com.hainguyen.patientservice.mapper.PatientMapper;
 import com.hainguyen.patientservice.model.Patient;
 import com.hainguyen.patientservice.repository.PatientRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -30,10 +35,24 @@ public class PatientService {
         this.kafkaProducer = kafkaProducer;
     }
 
-    public List<PatientResponseDTO> getPatients() {
-        List<Patient> patients = this.patientRepository.findAll();
+    public PagedPatientResponseDTO getPatients(int page, int size, String sort, String sortField, String searchValue) {
 
-        return patients.stream().map(PatientMapper::toDTO).toList();
+        Pageable pageable = PageRequest.of(page-1, size,
+                sort.equalsIgnoreCase("desc") ? Sort.by(sortField).descending() : Sort.by(sortField).ascending());
+
+        Page<Patient> patientPage;
+        if (searchValue == null || searchValue.isBlank()) {
+            patientPage = patientRepository.findAll(pageable);
+        } else {
+            patientPage = patientRepository.findByNameContainingIgnoreCase(pageable, searchValue);
+        }
+
+        return new PagedPatientResponseDTO(
+                patientPage.stream().map(PatientMapper::toDTO).toList(),
+                patientPage.getNumber() +1,
+                patientPage.getSize(),
+                patientPage.getTotalPages(),
+                (int) patientPage.getTotalElements());
     }
 
     public PatientResponseDTO createPatient(PatientRequestDTO patientRequestDTO) {

@@ -1,5 +1,6 @@
 package com.hainguyen.patientservice.controller;
 
+import com.hainguyen.patientservice.dto.PagedPatientResponseDTO;
 import com.hainguyen.patientservice.dto.PatientRequestDTO;
 import com.hainguyen.patientservice.dto.PatientResponseDTO;
 import com.hainguyen.patientservice.dto.validators.CreatePatientValidationGroup;
@@ -27,9 +28,13 @@ public class PatientController {
 
     @GetMapping
     @Operation(summary = "Get Patients")
-    public ResponseEntity<List<PatientResponseDTO>> getPatients() {
-        var patientResponseDTOs = patientService.getPatients();
-        return ResponseEntity.ok(patientResponseDTOs);
+    public ResponseEntity<PagedPatientResponseDTO> getPatients(@RequestParam(defaultValue = "1") int page,
+                                                               @RequestParam(defaultValue = "10") int size,
+                                                               @RequestParam(defaultValue = "asc") String sort,
+                                                               @RequestParam(defaultValue = "name")  String sortField,
+                                                               @RequestParam(defaultValue = "") String searchValue) {
+        PagedPatientResponseDTO pagedPatientResponseDTO =patientService.getPatients(page, size, sort, sortField, searchValue);
+        return ResponseEntity.ok(pagedPatientResponseDTO);
     }
 
     @PostMapping
