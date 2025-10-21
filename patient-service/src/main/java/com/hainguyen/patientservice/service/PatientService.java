@@ -10,6 +10,9 @@ import com.hainguyen.patientservice.kafka.KafkaProducer;
 import com.hainguyen.patientservice.mapper.PatientMapper;
 import com.hainguyen.patientservice.model.Patient;
 import com.hainguyen.patientservice.repository.PatientRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +26,7 @@ import java.util.UUID;
 @Service
 public class PatientService {
 
+    private static final Logger log = LoggerFactory.getLogger(PatientService.class);
     private final PatientRepository patientRepository;
     private final BillingServiceGrpcClient billingServiceGrpcClient;
     private final KafkaProducer kafkaProducer;
@@ -35,7 +39,20 @@ public class PatientService {
         this.kafkaProducer = kafkaProducer;
     }
 
+    @Cacheable(
+            value = "patients",
+            key = "#page +'-'+#size+'-'+#sort+'-'+#sortField",
+            condition = "#searchValue ==''"
+    )
     public PagedPatientResponseDTO getPatients(int page, int size, String sort, String sortField, String searchValue) {
+
+        log.info("[REDIS]: Cache miss - Fetching from database...");
+
+        try{
+            Thread.sleep(2000);
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
 
         Pageable pageable = PageRequest.of(page-1, size,
                 sort.equalsIgnoreCase("desc") ? Sort.by(sortField).descending() : Sort.by(sortField).ascending());

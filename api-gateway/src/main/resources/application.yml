@@ -4,6 +4,11 @@ server:
 
 #gateway
 spring:
+  # connect to Redis
+  data:
+    redis:
+      host: ${REDIS_HOST:redis}
+      port: ${REDIS_PORT:6379}
   cloud:
     gateway:
       server:
@@ -43,4 +48,12 @@ spring:
                 - Path=/api-docs/auth
               filters:
                 - RewritePath=/api-docs/auth,/v3/api-docs
+          default-filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.burstCapacity: 5 #max 5token
+                redis-rate-limiter.replenishRate: 5 #replenish 5token/s
+                redis-rate-limiter.requestedToken: 1 #default value. 1request/1token
+                key-resolver: "#{@ipKeyResolver}"
+
 
