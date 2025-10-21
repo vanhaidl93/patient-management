@@ -36,3 +36,21 @@ server:
 logging:
   level:
     root: info # all INFO - WARN - ERROR messages be logged to the terminal.
+
+#Resilience4j.CircuitBreaker
+resilience4j:
+  circuitbreaker:
+    instances:
+      billingService:
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+
+  retry:
+    instances:
+      billingRetry:
+        maxAttempts: 2
+        waitDuration: 500ms

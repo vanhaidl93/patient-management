@@ -1,12 +1,15 @@
 ### Create a new patient entity
-POST http://localhost:4000/api/patients
+POST http://localhost:4004/api/patients
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
-  "name": "John Doe Kafka",
-  "email": "kafka_test@example.com",
+  "name": "John Doe_CB1",
+  "email": "kafka_test_cb1@example.com",
   "address": "123 Main street",
   "dateOfBirth": "1993-10-08",
   "registeredDate": "2025-09-26"
 }
+
+
 ###
