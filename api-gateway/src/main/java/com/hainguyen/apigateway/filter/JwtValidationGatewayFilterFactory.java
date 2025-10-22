@@ -22,6 +22,7 @@ public class JwtValidationGatewayFilterFactory extends AbstractGatewayFilterFact
     public GatewayFilter apply(Object config) {
         return (serverWebExchange, gatewayFilterChain) ->{
             String token = serverWebExchange.getRequest().getHeaders().getFirst("Authorization");
+
             if (token == null || !token.startsWith("Bearer ")) {
                 serverWebExchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                 return serverWebExchange.getResponse().setComplete();

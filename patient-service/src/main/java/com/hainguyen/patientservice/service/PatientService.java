@@ -47,6 +47,7 @@ public class PatientService {
     public PagedPatientResponseDTO getPatients(int page, int size, String sort, String sortField, String searchValue) {
 
         log.info("[REDIS]: Cache miss - Fetching from database...");
+        // logic to capture metric - using AOP
 
         try{
             Thread.sleep(2000);

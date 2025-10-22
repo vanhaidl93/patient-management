@@ -1,3 +1,6 @@
+server:
+  port: 4000
+
 spring:
   application:
     name: patient-service
@@ -30,9 +33,6 @@ spring:
 #    init:
 #      mode: always  #development mode.
 
-server:
-  port: 4000
-
 logging:
   level:
     root: info # all INFO - WARN - ERROR messages be logged to the terminal.
@@ -48,9 +48,23 @@ resilience4j:
         waitDurationInOpenState: 10s
         permittedNumberOfCallsInHalfOpenState: 3
         automaticTransitionFromOpenToHalfOpenEnabled: true
-
   retry:
     instances:
       billingRetry:
         maxAttempts: 2
         waitDuration: 500ms
+
+#Observability, Metric
+#actuator endpoint
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics,cache
+  endpoint:
+    prometheus:
+      access: unrestricted
+  prometheus:
+    metrics:
+      export:
+        enabled: true
