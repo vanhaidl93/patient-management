@@ -1,11 +1,12 @@
-### Update an existing patient entity
-PUT http://localhost:4004/api/patients/123e4567-e89b-12d3-a456-426614174000
+### Update an existing patient entity (without Gateway - testing)
+PUT http://localhost:4000/patients/123e4567-e89b-12d3-a456-426614174000
+#PUT http://localhost:4004/api/patients/123e4567-e89b-12d3-a456-426614174000
 Content-Type: application/json
-Authorization: Bearer {{token}}
+#Authorization: Bearer {{token}}
 
 {
-  "name": "John Doe",
-  "email": "test_updated@example.com",
+  "name": "John Doe UPDATED",
+  "email":"john.doe.UPDATED@example.com",
   "address": "123 Main street",
   "dateOfBirth": "1993-10-08"
 }

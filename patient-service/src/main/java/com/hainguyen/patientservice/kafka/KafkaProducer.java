@@ -18,15 +18,29 @@ public class KafkaProducer {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendEvent(Patient patient) {
+    public void sendPatientCreatedEvent(Patient patient) {
         PatientEvent event = PatientEvent.newBuilder()
-                .setPatientId(patient.getId().toString()).setEmail(patient.getEmail())
-                .setName(patient.getName()).setEventType("PATIENT_CREATED")
+                .setPatientId(patient.getId().toString())
+                .setEmail(patient.getEmail())
+                .setName(patient.getName())
                 .build();
         try {
-            kafkaTemplate.send("patient", event.toByteArray());
+            kafkaTemplate.send("patient.created", event.toByteArray());
         } catch (Exception e) {
             log.error("Error sending PatientCreated event: {}", e.getMessage());
+        }
+    }
+
+    public void sendPatientUpdatedEvent(Patient patient) {
+        PatientEvent event = PatientEvent.newBuilder()
+                .setPatientId(patient.getId().toString())
+                .setEmail(patient.getEmail())
+                .setName(patient.getName())
+                .build();
+        try {
+            kafkaTemplate.send("patient.updated", event.toByteArray());
+        } catch (Exception e) {
+            log.error("Error sending PatientUpdated event: {}", e.getMessage());
         }
     }
 

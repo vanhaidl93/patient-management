@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -10,36 +11,20 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
+    <!-- Keep same coordinates -->
     <groupId>com.hainguyen</groupId>
     <artifactId>patient-management</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>patient-management</name>
-    <description>patient-management</description>
-    <!--Parent, doesn’t produce an artifact, just manage child modules-->
     <packaging>pom</packaging>
 
-    <url/>
-    <licenses>
-        <license/>
-    </licenses>
-    <developers>
-        <developer/>
-    </developers>
+    <name>patient-management (analytics build)</name>
+    <description>Lightweight parent for appointment-service Docker build</description>
 
+    <!-- Only include needed modules -->
     <modules>
         <module>proto</module>
-        <module>patient-service</module>
-        <module>billing-service</module>
-        <module>analytics-service</module>
         <module>appointment-service</module>
     </modules>
-
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
 
     <properties>
         <java.version>21</java.version>
@@ -56,19 +41,18 @@
         <protobuf.java.util.version>3.25.4</protobuf.java.util.version>
     </properties>
 
-    <!--controls the version when the dependency is declared in the child-->
-    <!--must still declare dependency under <dependencies> in the child-->
-    <!--child inherits managed versions, so we can omit <version>-->
+    <!-- 🔗 Keep dependency management (versions) -->
     <dependencyManagement>
         <dependencies>
-            <!--manage version to io.grpc group-->
+            <!-- GRPC BOM -->
             <dependency>
                 <groupId>io.grpc</groupId>
                 <artifactId>grpc-bom</artifactId>
-                <version>${grpc.java.version}</version> <!--stable version, groupId io.grpc -->
+                <version>${grpc.java.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
             <dependency>
                 <groupId>com.hainguyen</groupId>
                 <artifactId>proto</artifactId>
@@ -97,6 +81,7 @@
         </dependencies>
     </dependencyManagement>
 
+    <!-- 🛠 Keep same build plugins -->
     <build>
         <plugins>
             <plugin>
@@ -105,5 +90,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
