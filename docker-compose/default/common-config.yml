@@ -1,0 +1,22 @@
+services:
+  network-deploy-service:
+    networks:
+      - internal
+
+  microservice-base-config:
+    extends:
+      service: network-deploy-service
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+
+  microservice-kafka-redis-config:
+    extends:
+      service: microservice-base-config
+    depends_on:
+      kafka:
+        condition: service_healthy
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+

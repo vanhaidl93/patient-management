@@ -4,3 +4,16 @@ server:
 spring:
   application:
     name: auth-service
+  datasource:
+    password: ${SPRING_DATASOURCE_PASSWORD:password}
+    username: ${SPRING_DATASOURCE_USERNAME:admin_user}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://auth-service-db:5432/db}
+  jpa:
+    hibernate:
+      ddl-auto: update #for dev.
+  sql:
+    init:
+      mode: always #classpath:data.sql
+
+jwt:
+  secret: ${JWT_SECRET:jTt8XbzMJvR8TUVvWikVkjpc4vQgyoDcvMNEPRi0TBY=}
